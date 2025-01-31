@@ -1,9 +1,10 @@
-import "../styles/card.css";
+import styles from "../styles/card.module.css";
 import PropTypes from 'prop-types';
 
-const Card = ({ img, name, title, email }) => {
+const Card = ({ img, name, title, email, animate, updateAnimate }) => {
     return (
-        <div className="profile-card">
+        <div className={`${styles['profile-card']} ${animate ? styles["is-entering"] : "" }`}
+        onAnimationEnd={updateAnimate}>
             <div className="profile-card_img">
                 <img src={img} alt={name} />
             </div>

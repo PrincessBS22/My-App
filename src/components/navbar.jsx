@@ -1,6 +1,7 @@
-import "../styles/navbar.css";
+import styles from "../styles/navbar.module.css";
 
-const Navbar= () => {
+
+const Navbar= ({darkMode, onClick}) => {
     return(
         <nav className="navbar">
             <ul>
@@ -8,6 +9,9 @@ const Navbar= () => {
                 <li><a href="#">About</a></li>
                 <li><a href="#">Profiles</a></li>
             </ul>
+            <button onClick={onClick}>
+                {darkMode ? "Dark Mode"  : "Light Mode"}
+            </button>
         </nav>
     )
 }

@@ -1,0 +1,53 @@
+@keyframes cardEnter {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.profile-cards {
+    padding: 1rem;
+    display: flex;
+}
+
+img {
+    width: 150px;
+    padding-top: 25%;
+    height: 150px;
+    overflow: hidden;
+}
+
+.profile-card a {
+    color: white;
+}
+
+:global(body.darkMode) .profile-card a {
+    color: blue;
+}
+
+.profile-card a:hover {
+    color: aquamarine;
+}
+
+.profile-card {
+    width: 200px;
+    margin: 2rem;
+    Background-color: grey;
+    border: 3px solid blue;
+
+    &.is-entering {
+        opacity: 0;
+        transform: scale(0.9);
+        animation: cardEnter 0.5s forwards;
+    }
+} 
+
+:global(body.darkMode) .profile-card {
+    background-color: lightgrey;
+    
+}
