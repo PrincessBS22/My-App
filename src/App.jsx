@@ -8,6 +8,7 @@ import img_2 from "./assets/maxresdefault.jpg";
 import Card from "./components/card";
 import styles from "./styles/card.module.css";
 import Wrapper from "./components/wrapper";
+import ProfileForm from "./components/profileForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -104,6 +105,9 @@ const App = () => {
         </Wrapper>
         <Wrapper>
           <About />
+        </Wrapper>
+        <Wrapper>
+          <ProfileForm />
         </Wrapper>
         <Wrapper>
           <div className="filter-wrapper">
