@@ -11,39 +11,50 @@ import Wrapper from "./components/wrapper";
 import ProfileForm from "./components/profileForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useEffect } from "react";
+import { use } from "react";
 
 const App = () => {
-  const profiles = [{
-    img: img_1,
-    name: 'Jane Doe',
-    title: 'Engineer',
-    email: 'rar@gmail.com'
-  }, {
-    img: img_2,
-    name: 'John Smith',
-    title: 'Social Media Manager',
-    email: 'json@gmail.com'
-  }, {
-    img: img_1,
-    name: 'Jane Deer',
-    title: 'CEO',
-    email: 'js@gmail.com'
-  }, {
-    img: img_2,
-    name: 'Steve Smith',
-    title: 'Social Media Creator',
-    email: 'jsx@gmail.com'
-  }, {
-    img: img_1,
-    name: 'Barbra Buck',
-    title: 'Engineer',
-    email: 'html@gmail.com'
-  }, {
-    img: img_2,
-    name: 'Dan Johnson',
-    title: 'Designer',
-    email: 'css@gmail.com'
-  }]
+  const [profiles, setProfiles] = useState([]);
+  useEffect(() => {
+  fetch("https://web.ics.purdue.edu/~shaverb/fetch-data.php")
+        .then(res => res.json())
+        .then(data => {
+          setProfiles(data);
+          console.log(data)
+        })
+      }, []);
+  // const profiles = [{
+  //   img: img_1,
+  //   name: 'Jane Doe',
+  //   title: 'Engineer',
+  //   email: 'rar@gmail.com'
+  // }, {
+  //   img: img_2,
+  //   name: 'John Smith',
+  //   title: 'Social Media Manager',
+  //   email: 'json@gmail.com'
+  // }, {
+  //   img: img_1,
+  //   name: 'Jane Deer',
+  //   title: 'CEO',
+  //   email: 'js@gmail.com'
+  // }, {
+  //   img: img_2,
+  //   name: 'Steve Smith',
+  //   title: 'Social Media Creator',
+  //   email: 'jsx@gmail.com'
+  // }, {
+  //   img: img_1,
+  //   name: 'Barbra Buck',
+  //   title: 'Engineer',
+  //   email: 'html@gmail.com'
+  // }, {
+  //   img: img_2,
+  //   name: 'Dan Johnson',
+  //   title: 'Designer',
+  //   email: 'css@gmail.com'
+  // }]
 
   //store animation state
   const [animation, setAnimation] = useState(false);
@@ -128,7 +139,7 @@ const App = () => {
           </div>
           <div className={styles["profile-cards"]}>
             {filteredProfiles.map((profile) =>
-              (<Card key={profile.email} {...profile} animate={animation} updateAnimate={handleAnimation}/>))}
+              (<Card key={profile.id} {...profile} animate={animation} updateAnimate={handleAnimation}/>))}
           </div>
         </Wrapper>
       </main>
