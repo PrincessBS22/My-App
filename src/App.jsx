@@ -10,56 +10,16 @@ import styles from "./styles/card.module.css";
 import Wrapper from "./components/wrapper";
 import ProfileForm from "./components/profileForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from "react";
 import { use } from "react";
 
 const App = () => {
-  const [profiles, setProfiles] = useState([]);
-  useEffect(() => {
-  fetch("https://web.ics.purdue.edu/~shaverb/fetch-data.php")
-        .then(res => res.json())
-        .then(data => {
-          setProfiles(data);
-          console.log(data)
-        })
-      }, []);
-  // const profiles = [{
-  //   img: img_1,
-  //   name: 'Jane Doe',
-  //   title: 'Engineer',
-  //   email: 'rar@gmail.com'
-  // }, {
-  //   img: img_2,
-  //   name: 'John Smith',
-  //   title: 'Social Media Manager',
-  //   email: 'json@gmail.com'
-  // }, {
-  //   img: img_1,
-  //   name: 'Jane Deer',
-  //   title: 'CEO',
-  //   email: 'js@gmail.com'
-  // }, {
-  //   img: img_2,
-  //   name: 'Steve Smith',
-  //   title: 'Social Media Creator',
-  //   email: 'jsx@gmail.com'
-  // }, {
-  //   img: img_1,
-  //   name: 'Barbra Buck',
-  //   title: 'Engineer',
-  //   email: 'html@gmail.com'
-  // }, {
-  //   img: img_2,
-  //   name: 'Dan Johnson',
-  //   title: 'Designer',
-  //   email: 'css@gmail.com'
-  // }]
 
-  //store animation state
-  const [animation, setAnimation] = useState(false);
-  const handleAnimation = () =>{
-    setAnimation(false);}
+  // //store animation state
+  // const [animation, setAnimation] = useState(false);
+  // const handleAnimation = () =>{
+  //   setAnimation(false);}
 
   const [darkMode, setDarkMode] = useState(false);
   const handleClick = () => {
@@ -72,35 +32,62 @@ const App = () => {
     setDarkMode(!darkMode);
   };
   //get titles
-  const titles = [...new Set(profiles.map((profile) => profile.title))];
+  const [titles, setTitles] = useState([])
+  useEffect(() => {
+    fetch("https://web.ics.purdue.edu/~shaverb/get-titles.php")
+    .then((res) => res.json())
+    .then((data) => {
+      setTitles(data.titles)
+    })
+  },[])
+    // },[])
   const [title, setTitle] = useState("");
   //update title on change
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
     console.log(event.target.value);
-    setAnimation(true);
+    setPage(1);
+    //setAnimation(true);
   };
   //name search
   const [search, setSearch] = useState("");
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
-    setAnimation(true);
+    setPage(1);
+    //setAnimation(true);
   };
   const handleClear = () => {
     setTitle("");
     setSearch("");
-    setAnimation(true);
+    setPage(1);
+    //setAnimation(true);
   }
+  
+  const [profiles, setProfiles] = useState([]);
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(1);
+  useEffect(() => {
+  fetch(`https://web.ics.purdue.edu/~shaverb/fetch-data-with-filter.php?title=${title}&name=${search}&page=${page}&limit=10`)
+        .then(res => res.json())
+        .then((data) => {
+          setProfiles(data.profiles);
+          setCount(data.count);
+          setPage(data.page);
+          console.log(page)
+        })
+      }, [title,search,page]);
+
   //filter the profiles based on the title
-  const filteredProfiles = profiles.filter((profile) =>
-    // if(title===""){
-    //   return true;
-    // }
-    // else{
-    //   return profile.title === title;
-    // }
-    (title === "" || profile.title === title) && profile.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // const filteredProfiles = profiles.filter((profile) =>
+  //   // if(title===""){
+  //   //   return true;
+  //   // }
+  //   // else{
+  //   //   return profile.title === title;
+  //   // }
+  //   (title === "" || profile.title === title) && profile.name.toLowerCase().includes(search.toLowerCase())
+  // );
+
 
   return (
     <>
@@ -138,9 +125,16 @@ const App = () => {
             </div>
           </div>
           <div className={styles["profile-cards"]}>
-            {filteredProfiles.map((profile) =>
-              (<Card key={profile.id} {...profile} animate={animation} updateAnimate={handleAnimation}/>))}
+            {profiles.map((profile) =>
+              (<Card key={profile.id} {...profile}/>))}
           </div>
+          {count===0 && <p>No profiles found!</p>}
+          {count > 10 &&
+          <div className="pageinator">
+              <button onClick={() => {setPage(pre=>pre-1);console.log(page)} } disabled={page===1}><FontAwesomeIcon icon={faChevronLeft} /></button>
+              <span>{page}/{Math.ceil(count/10)}</span>
+              <button onClick={() => {setPage(pre=>pre+1);console.log(page)} } disabled={page>=Math.ceil(count/10)}><FontAwesomeIcon icon={faChevronRight} /></button>
+          </div>}
         </Wrapper>
       </main>
     </>

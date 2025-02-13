@@ -13,6 +13,7 @@
 .profile-cards {
     padding: 1rem;
     display: flex;
+    flex-wrap: wrap;
 }
 
 img {
@@ -31,11 +32,11 @@ img {
 }
 
 .profile-card a:hover {
-    color: aquamarine;
+    color: blue;
 }
 
 .profile-card {
-    width: 200px;
+    width: 180px;
     margin: 2rem;
     Background-color: grey;
     border: 3px solid blue;
