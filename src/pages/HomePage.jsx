@@ -8,6 +8,7 @@ import ProfileForm from "../components/profileForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { use } from "react";
 
 const HomePage = () => {
@@ -102,7 +103,10 @@ const HomePage = () => {
           </div>
           <div className={styles["profile-cards"]}>
             {profiles.map((profile) =>
-              (<Card key={profile.id} {...profile}/>))}
+              (<Link to={`/profile/${profile.id}`} key={profile.id}>
+                <Card key={profile.id} {...profile}/>
+                </Link>
+              ))}
           </div>
           {count===0 && <p>No profiles found!</p>}
           {count > 10 &&

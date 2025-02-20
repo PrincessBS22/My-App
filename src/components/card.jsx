@@ -11,7 +11,6 @@ const Card = ({ image_url, name, title, email, animate, updateAnimate }) => {
             <div className="profile-card_content">
                 <p>{name}</p>
                 <p>{title}</p>
-                <p><a href={`mailto:${email}`}>{email}</a></p>
             </div>
         </div>
     );
