@@ -1,8 +1,12 @@
 import styles from "../styles/navbar.module.css";
 import {Link} from "react-router-dom";
+import {ModeProvider} from "../contexts/ModeContext";
+import ModeContext from "../contexts/ModeContext";
+import {useContext} from "react";
 
 
-const Navbar= ({darkMode, onClick}) => {
+const Navbar= () => {
+    const { mode, handleModeChange } = useContext(ModeContext);
     return(
         <nav className="navbar">
             <ul>
@@ -10,8 +14,8 @@ const Navbar= ({darkMode, onClick}) => {
                 <li><Link to="/about">About</Link></li>
                 <li><Link to="/add-profile">Add Profile</Link></li>
             </ul>
-            <button onClick={onClick}>
-                {darkMode ? "Dark Mode"  : "Light Mode"}
+            <button onClick={handleModeChange}>
+                {mode === "dark" ? "Dark Mode"  : "Light Mode"}
             </button>
         </nav>
     )

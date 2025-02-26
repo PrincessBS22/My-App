@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState, useEffect, useContext } from 'react';
+import './App.css';
 import About from "./components/about";
 import Navbar from "./components/navbar";
 import { HashRouter, Routes, Route} from "react-router-dom";
@@ -11,32 +10,32 @@ import ProfileDetailPage from "./pages/ProfileDetailPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
 import ProfileLayoutPage from "./pages/ProfileLayoutPage";
 import NotFound from "./pages/NotFound";
+import {ModeProvider} from "./contexts/ModeContext";
+import ModeContext from "./contexts/ModeContext";
 
 
 const App = () => {
+  const {mode} = useContext(ModeContext);
 
-  // //store animation state
-  // const [animation, setAnimation] = useState(false);
-  // const handleAnimation = () =>{
-  //   setAnimation(false);}
-
-  const [darkMode, setDarkMode] = useState(false);
-  const handleClick = () => {
-    if(!darkMode){
-      document.body.classList.add("darkMode")
-    }
-    else{
-      document.body.classList.remove("darkMode")
-    }
-    setDarkMode(!darkMode);
-  };
+  // const [darkMode, setDarkMode] = useState(false);
+  // const handleClick = () => {
+  //   if(!darkMode){
+  //     document.body.classList.add("darkMode")
+  //   }
+  //   else{
+  //     document.body.classList.remove("darkMode")
+  //   }
+  //   setDarkMode(!darkMode);
+  // };
   
   return (
+    
     <HashRouter>
       <header>
-        <Navbar darkMode={darkMode} onClick={handleClick}/>
+        <Navbar/>
       </header>
-      <main className="corpse">
+
+      <main className={`${(mode === "dark"? document.body.classList.remove("darkMode") : document.body.classList.add("darkMode")), "corpse"}`}>
         <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/add-profile" element={<AddProfile />}/>
@@ -49,6 +48,7 @@ const App = () => {
         </Routes>
       </main>
     </HashRouter>
+    
   )
 }
 
