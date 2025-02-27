@@ -1,10 +1,11 @@
 import Wrapper from "../components/wrapper";
 import { useState, useEffect } from 'react'
 import {useParams, Link} from "react-router-dom";
-
+import {useContext} from "react";
+import AuthContext from "../contexts/AuthContext";
 
 const ProfileDetailPage = () => {
-
+    const {isLogin} = useContext(AuthContext);
     const {id} = useParams();
     const [profile, setProfile] = useState(null);
 
@@ -29,7 +30,7 @@ const ProfileDetailPage = () => {
           <p><a href={`mailto:${profile.email}`}>{profile.email}</a></p>
           <p>{profile.bio}</p>
           <img src={profile.image_url} alt={profile.name} />
-          <Link to='edit'>Edit Profile</Link>
+          {isLogin && <Link to='edit'>Edit Profile</Link>}
           </>)}
         </Wrapper>
       </main>
