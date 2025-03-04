@@ -7,15 +7,19 @@ import { faTimes, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { use } from "react";
+import { useReducer } from "react";
+import {initialState, homeReducer} from "../reducers/homeReducer"
 
 const HomePage = () => {
-  const [profiles, setProfiles] = useState([]);
-  const [page, setPage] = useState(1);
-  const [count, setCount] = useState(1);
-  const [darkMode, setDarkMode] = useState(false);
-  const [titles, setTitles] = useState([]);
-  const [title, setTitle] = useState("");
-  const [search, setSearch] = useState("");
+  // const [profiles, setProfiles] = useState([]);
+  // const [page, setPage] = useState(1);
+  // const [count, setCount] = useState(1);
+  // const [darkMode, setDarkMode] = useState(false);
+  // const [titles, setTitles] = useState([]);
+  // const [title, setTitle] = useState("");
+  // const [search, setSearch] = useState("");
+const [state, dispatch] = useReducer(homeReducer, initialState);
+const {titles, title, search, profiles, page, count} = state;
 
   // //store animation state
   // const [animation, setAnimation] = useState(false);
@@ -27,27 +31,31 @@ const HomePage = () => {
     fetch("https://web.ics.purdue.edu/~shaverb/get-titles.php")
     .then((res) => res.json())
     .then((data) => {
-      setTitles(data.titles)
+      //setTitles(data.titles)
+      dispatch({type: "SET_TITLES", payload:data.titles})
     })
   },[])
     // },[])
   //update title on change
   const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-    console.log(event.target.value);
-    setPage(1);
+    // setTitle(event.target.value);
+    // console.log(event.target.value);
+    // setPage(1);
+    dispatch({type: "SET_TITLE", payload:event.target.value});
     //setAnimation(true);
   };
   //name search
   const handleSearchChange = (event) => {
-    setSearch(event.target.value);
-    setPage(1);
+    // setSearch(event.target.value);
+    // setPage(1);
+    dispatch({type: "SET_SEARCH", payload:event.target.value});
     //setAnimation(true);
   };
   const handleClear = () => {
-    setTitle("");
-    setSearch("");
-    setPage(1);
+    // setTitle("");
+    // setSearch("");
+    // setPage(1);
+    dispatch({type: "CLEAR_FILTERS"});
     //setAnimation(true);
   }
   
@@ -55,9 +63,10 @@ const HomePage = () => {
   fetch(`https://web.ics.purdue.edu/~shaverb/fetch-data-with-filter.php?title=${title}&name=${search}&page=${page}&limit=10`)
         .then(res => res.json())
         .then((data) => {
-          setProfiles(data.profiles);
-          setCount(data.count);
-          setPage(data.page);
+          // setProfiles(data.profiles);
+          // setCount(data.count);
+          // setPage(data.page);
+          dispatch({type: "FETCH_DATA", payload:data});
           console.log(page)
         })
       }, [title,search,page]);
@@ -98,9 +107,9 @@ const HomePage = () => {
           {count===0 && <p>No profiles found!</p>}
           {count > 10 &&
           <div className="pageinator">
-              <button onClick={() => {setPage(pre=>pre-1);console.log(page)} } disabled={page===1}><FontAwesomeIcon icon={faChevronLeft} /></button>
+              <button onClick={() => dispatch({type:"SETPAGE", payload : page-1}) } disabled={page===1}><FontAwesomeIcon icon={faChevronLeft} /></button>
               <span>{page}/{Math.ceil(count/10)}</span>
-              <button onClick={() => {setPage(pre=>pre+1);console.log(page)} } disabled={page>=Math.ceil(count/10)}><FontAwesomeIcon icon={faChevronRight} /></button>
+              <button onClick={() => dispatch({type:"SETPAGE", payload : page+1}) } disabled={page>=Math.ceil(count/10)}><FontAwesomeIcon icon={faChevronRight} /></button>
           </div>}
         </Wrapper>
       </main>

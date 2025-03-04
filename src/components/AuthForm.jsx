@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from "../contexts/AuthContext";
 import {useContext} from "react";
@@ -10,6 +10,10 @@ const AuthForm = ({isRegister} = false) => {
     const [submited, setSubmited]= useState(false);
     const [successM, setSuccessM]= useState("");
     const navigate = useNavigate();
+    const nameRef = useRef(null);
+    useLayoutEffect(() => {
+        nameRef.current.focus();
+    }, []);
 
     const handleChange = (e) => {
         setData({...data, [e.target.name]: e.target.value});
@@ -62,7 +66,7 @@ const AuthForm = ({isRegister} = false) => {
 
     return (
         <form onSubmit={handleSubmit} className="profile-form">
-            <input type="text" name="username" placeholder="Userame" required value={data.username} onChange={handleChange} />
+            <input ref="nameRef" type="text" name="username" placeholder="Userame" required value={data.username} onChange={handleChange} />
             {isRegister && <input type="email" name="email" placeholder="Email" required value={data.email} onChange={handleChange} />}
             <input type="password" name="password" placeholder="Password (min 8 char)" minLength="8" required value={data.password} onChange={handleChange} />
             <button type="submit" disabled={submited|| data.username.trim === "" || (isRegister && data.email.trim === "") ||data.password.trim === "" }>Submit</button>
