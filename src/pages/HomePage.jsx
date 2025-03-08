@@ -1,14 +1,11 @@
-import { useState } from 'react'
 import Card from "../components/card";
 import styles from "../styles/card.module.css";
 import Wrapper from "../components/wrapper";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { use } from "react";
-import { useReducer } from "react";
-import {initialState, homeReducer} from "../reducers/homeReducer"
+import useHomePageAPI from "../hooks/homepageAPI";
 
 const HomePage = () => {
   // const [profiles, setProfiles] = useState([]);
@@ -18,7 +15,7 @@ const HomePage = () => {
   // const [titles, setTitles] = useState([]);
   // const [title, setTitle] = useState("");
   // const [search, setSearch] = useState("");
-const [state, dispatch] = useReducer(homeReducer, initialState);
+const [state, dispatch] = useHomePageAPI();
 const {titles, title, search, profiles, page, count} = state;
 
   // //store animation state
@@ -27,15 +24,16 @@ const {titles, title, search, profiles, page, count} = state;
   //   setAnimation(false);}
 
   //get titles
-  useEffect(() => {
-    fetch("https://web.ics.purdue.edu/~shaverb/get-titles.php")
-    .then((res) => res.json())
-    .then((data) => {
-      //setTitles(data.titles)
-      dispatch({type: "SET_TITLES", payload:data.titles})
-    })
-  },[])
+  // useEffect(() => {
+  //   fetch("https://web.ics.purdue.edu/~shaverb/get-titles.php")
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     //setTitles(data.titles)
+  //     dispatch({type: "SET_TITLES", payload:data.titles})
+  //   })
+  // },[])
     // },[])
+
   //update title on change
   const handleTitleChange = (event) => {
     // setTitle(event.target.value);
@@ -44,6 +42,7 @@ const {titles, title, search, profiles, page, count} = state;
     dispatch({type: "SET_TITLE", payload:event.target.value});
     //setAnimation(true);
   };
+
   //name search
   const handleSearchChange = (event) => {
     // setSearch(event.target.value);
@@ -51,6 +50,7 @@ const {titles, title, search, profiles, page, count} = state;
     dispatch({type: "SET_SEARCH", payload:event.target.value});
     //setAnimation(true);
   };
+  
   const handleClear = () => {
     // setTitle("");
     // setSearch("");
@@ -59,17 +59,17 @@ const {titles, title, search, profiles, page, count} = state;
     //setAnimation(true);
   }
   
-  useEffect(() => {
-  fetch(`https://web.ics.purdue.edu/~shaverb/fetch-data-with-filter.php?title=${title}&name=${search}&page=${page}&limit=10`)
-        .then(res => res.json())
-        .then((data) => {
-          // setProfiles(data.profiles);
-          // setCount(data.count);
-          // setPage(data.page);
-          dispatch({type: "FETCH_DATA", payload:data});
-          console.log(page)
-        })
-      }, [title,search,page]);
+  // useEffect(() => {
+  // fetch(`https://web.ics.purdue.edu/~shaverb/fetch-data-with-filter.php?title=${title}&name=${search}&page=${page}&limit=10`)
+  //       .then(res => res.json())
+  //       .then((data) => {
+  //         // setProfiles(data.profiles);
+  //         // setCount(data.count);
+  //         // setPage(data.page);
+  //         dispatch({type: "FETCH_DATA", payload:data});
+  //         console.log(page)
+  //       })
+  //     }, [title,search,page]);
 
   return (
     <>
