@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext , lazy , Suspense} from 'react';
 import './App.css';
 import About from "./components/about";
 import Navbar from "./components/navbar";
@@ -33,6 +33,8 @@ const App = () => {
   //   setDarkMode(!darkMode);
   // };
   
+    const LazyComp = lazy(() => import("./pages/ProfileDetailPage"));
+
   return (
     <AuthProvider>
     <HashRouter>
@@ -46,7 +48,7 @@ const App = () => {
         <Route path="/add-profile" element={<ProtectedRoute><AddProfile /></ProtectedRoute>}/>
         <Route path="/about" element={<AboutPage />} />
         <Route path="profile/:id" element={<ProfileLayoutPage/>}>
-          <Route index element={<ProfileDetailPage/>}/>
+          <Route index element={<Suspense fallback = {<div>Loading...</div>}><LazyComp/></Suspense>}/>
           <Route path="edit" element={<ProtectedRoute><ProfileEditPage/></ProtectedRoute>}/>
         </Route>
         <Route path="/login" element={<Login/>}/>

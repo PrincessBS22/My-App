@@ -1,7 +1,13 @@
 import styles from "../styles/card.module.css";
 import PropTypes from 'prop-types';
+import { useRef, useEffect, memo } from "react";
 
-const Card = ({ image_url, name, title, email, animate, updateAnimate }) => {
+const Card = memo(({ image_url, name, title, email, animate, updateAnimate }) => {
+    const renderCounter= useRef(0);
+    useEffect(()=> {
+        renderCounter.current = renderCounter.current + 1
+        console.log ("Card", renderCounter.current )
+    })
     return (
         <div className={`${styles['profile-card']} ${animate ? styles["is-entering"] : "" }`}
         onAnimationEnd={updateAnimate}>
@@ -15,7 +21,7 @@ const Card = ({ image_url, name, title, email, animate, updateAnimate }) => {
         </div>
     );
 
-}
+});
 Card.propTypes = {
     image_url: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,

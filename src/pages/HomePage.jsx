@@ -4,8 +4,9 @@ import Wrapper from "../components/wrapper";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from "react-router-dom";
-import { use } from "react";
+import { useCallback, useMemo } from "react";
 import useHomePageAPI from "../hooks/homepageAPI";
+import Filter from "../components/filters";
 
 const HomePage = () => {
   // const [profiles, setProfiles] = useState([]);
@@ -15,8 +16,8 @@ const HomePage = () => {
   // const [titles, setTitles] = useState([]);
   // const [title, setTitle] = useState("");
   // const [search, setSearch] = useState("");
-const [state, dispatch] = useHomePageAPI();
-const {titles, title, search, profiles, page, count} = state;
+  const [state, dispatch] = useHomePageAPI();
+  const { titles, title, search, profiles, page, count } = state;
 
   // //store animation state
   // const [animation, setAnimation] = useState(false);
@@ -32,33 +33,33 @@ const {titles, title, search, profiles, page, count} = state;
   //     dispatch({type: "SET_TITLES", payload:data.titles})
   //   })
   // },[])
-    // },[])
+  // },[])
 
   //update title on change
-  const handleTitleChange = (event) => {
+  const handleTitleChange = useCallback((event) => {
     // setTitle(event.target.value);
     // console.log(event.target.value);
     // setPage(1);
-    dispatch({type: "SET_TITLE", payload:event.target.value});
+    dispatch({ type: "SET_TITLE", payload: event.target.value });
     //setAnimation(true);
-  };
+  }, []);
 
   //name search
-  const handleSearchChange = (event) => {
+  const handleSearchChange = useCallback((event) => {
     // setSearch(event.target.value);
     // setPage(1);
-    dispatch({type: "SET_SEARCH", payload:event.target.value});
+    dispatch({ type: "SET_SEARCH", payload: event.target.value });
     //setAnimation(true);
-  };
-  
-  const handleClear = () => {
+  }, []);
+
+  const handleClear = useCallback(() => {
     // setTitle("");
     // setSearch("");
     // setPage(1);
-    dispatch({type: "CLEAR_FILTERS"});
+    dispatch({ type: "CLEAR_FILTERS" });
     //setAnimation(true);
-  }
-  
+  }, []);
+
   // useEffect(() => {
   // fetch(`https://web.ics.purdue.edu/~shaverb/fetch-data-with-filter.php?title=${title}&name=${search}&page=${page}&limit=10`)
   //       .then(res => res.json())
@@ -71,6 +72,8 @@ const {titles, title, search, profiles, page, count} = state;
   //       })
   //     }, [title,search,page]);
 
+  const titlesValue = useMemo(() => titles, [titles]);
+
   return (
     <>
       <main className="corpse">
@@ -81,36 +84,26 @@ const {titles, title, search, profiles, page, count} = state;
           </button> */}
         </Wrapper>
         <Wrapper>
-          <div className="filter-wrapper">
-            <div className="filter-select">
-              <label htmlFor="title-select">Select a Job Title: </label>
-              <select id="title-select" onChange={handleTitleChange} value={title}>
-                <option value="">All</option>
-                {titles.map((title) => (<option key={title} value={title}>{title}</option>))};
-              </select>
-            </div>
-            <div className="filter-search">
-              <label htmlFor="search">Search by Name: </label>
-              <input type="search" id="search" onChange={handleSearchChange} value={search}/>
-              <button onClick={handleClear}>
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-            </div>
-          </div>
+          <Filter titles={titlesValue} 
+            title={title} search={search} 
+            handleTitleChange={handleTitleChange} 
+            handleSearchChange={handleSearchChange} 
+            handleClear={handleClear} 
+          />
           <div className={styles["profile-cards"]}>
             {profiles.map((profile) =>
-              (<Link to={`/profile/${profile.id}`} key={profile.id}>
-                <Card key={profile.id} {...profile}/>
-                </Link>
-              ))}
+            (<Link to={`/profile/${profile.id}`} key={profile.id}>
+              <Card key={profile.id} {...profile} />
+            </Link>
+            ))}
           </div>
-          {count===0 && <p>No profiles found!</p>}
+          {count === 0 && <p>No profiles found!</p>}
           {count > 10 &&
-          <div className="pageinator">
-              <button onClick={() => dispatch({type:"SETPAGE", payload : page-1}) } disabled={page===1}><FontAwesomeIcon icon={faChevronLeft} /></button>
-              <span>{page}/{Math.ceil(count/10)}</span>
-              <button onClick={() => dispatch({type:"SETPAGE", payload : page+1}) } disabled={page>=Math.ceil(count/10)}><FontAwesomeIcon icon={faChevronRight} /></button>
-          </div>}
+            <div className="pageinator">
+              <button onClick={() => dispatch({ type: "SETPAGE", payload: page - 1 })} disabled={page === 1}><FontAwesomeIcon icon={faChevronLeft} /></button>
+              <span>{page}/{Math.ceil(count / 10)}</span>
+              <button onClick={() => dispatch({ type: "SETPAGE", payload: page + 1 })} disabled={page >= Math.ceil(count / 10)}><FontAwesomeIcon icon={faChevronRight} /></button>
+            </div>}
         </Wrapper>
       </main>
     </>
