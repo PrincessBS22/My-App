@@ -17,10 +17,10 @@ import ModeContext from "./contexts/ModeContext";
 import {AuthProvider} from "./contexts/AuthContext";
 import AuthContext from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import { useSelector } from 'react-redux';
 
 const App = () => {
-  const {mode} = useContext(ModeContext);
+  //const {mode} = useContext(ModeContext);
 
   // const [darkMode, setDarkMode] = useState(false);
   // const handleClick = () => {
@@ -32,7 +32,7 @@ const App = () => {
   //   }
   //   setDarkMode(!darkMode);
   // };
-  
+    const mode = useSelector((state) => state.mode.mode);
     const LazyComp = lazy(() => import("./pages/ProfileDetailPage"));
 
   return (

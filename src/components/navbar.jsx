@@ -5,10 +5,18 @@ import {useMode} from "../contexts/ModeContext";
 import {useContext} from "react";
 import AuthContext from "../contexts/AuthContext";
 import {AuthProvider} from "../contexts/AuthContext";
+import { useSelector, useDispatch } from "react-redux";
+import { toggle } from "../redux/modeSlice";
 
 
 const Navbar= () => {
-    const { mode, handleModeChange } = useMode();
+    //const { mode, handleModeChange } = useMode();
+    const mode = useSelector((state) => state.mode.mode);
+    const dispatch = useDispatch();
+    const handleModeChange = () => {
+        dispatch(toggle());
+    }
+
     const { isLogin, logout } = useContext(AuthContext);
     return(
         <nav className="navbar">
