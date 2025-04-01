@@ -9,6 +9,7 @@ export const AuthProvider = ({children}) => {
         localStorage.setItem("isLogin", "true");
     }, []);
     const logout = useCallback(() => {
+        
         fetch("https://web.ics.purdue.edu/~shaverb/logout.php")
             .then((response) => response.json())
             .then(data=> {
