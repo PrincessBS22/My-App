@@ -2,17 +2,19 @@ import styles from "../styles/navbar.module.css";
 import {Link, useNavigate} from "react-router-dom";
 import {ModeProvider} from "../contexts/ModeContext";
 import {useMode} from "../contexts/ModeContext";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import AuthContext from "../contexts/AuthContext";
 import {AuthProvider} from "../contexts/AuthContext";
 import { useSelector, useDispatch } from "react-redux";
 import { toggle } from "../redux/modeSlice";
 import { logout } from "../redux/authSlice";
+import BotFwiend from "./botFwiend";
 
 
 const Navbar= () => {
     const navigate = useNavigate();
     //const { mode, handleModeChange } = useMode();
+    const [isChatbotVisible, setChatbotVisible] = useState(false);
     const mode = useSelector((state) => state.mode.mode);
     const dispatch = useDispatch();
     const handleModeChange = () => {
@@ -27,7 +29,12 @@ const Navbar= () => {
         console.log("rar");
     }
 
+    const handleChatbotClick = () => {
+        setChatbotVisible((prev) => !prev);
+      };
+
     return(
+    <>
         <nav className="navbar">
             <ul>
                 <li><Link to="/">Home</Link></li>
@@ -43,7 +50,12 @@ const Navbar= () => {
             <button onClick={handleModeChange}>
                 {mode === "dark" ? "Dark Mode"  : "Light Mode"}
             </button>
+            <button onClick={handleChatbotClick} className={styles["chatbot-button"]}>
+                Chatbot
+            </button>
         </nav>
+      <BotFwiend isVisible={isChatbotVisible} onClose={() => setChatbotVisible(false)} />
+    </>
     )
 }
 export default Navbar;
